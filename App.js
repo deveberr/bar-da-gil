@@ -1,20 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { ProductProvider } from "./ProductContext";
+import MainScreen from "./screens/MainScreen";
+import AddProductScreen from "./screens/AddProductScreen";
+import EditProductScreen from "./screens/EditProductScreen";
+import SaleScreen from "./screens/SaleScreen";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+    const [products, setProducts] = useState([]);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    return (
+        <ProductProvider>
+            <NavigationContainer>
+                <Stack.Navigator initialRouteName="Main">
+                    <Stack.Screen name="Produtos">{(props) => <MainScreen {...props} products={products} setProducts={setProducts} />}</Stack.Screen>
+                    <Stack.Screen name="AddProduct">{(props) => <AddProductScreen {...props} setProducts={setProducts} />}</Stack.Screen>
+                    <Stack.Screen name="EditProduct">{(props) => <EditProductScreen {...props} products={products} setProducts={setProducts} />}</Stack.Screen>
+                    <Stack.Screen name="Sale">{(props) => <SaleScreen {...props} products={products} setProducts={setProducts} />}</Stack.Screen>
+                </Stack.Navigator>
+            </NavigationContainer>
+        </ProductProvider>
+    );
+}
